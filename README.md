@@ -48,3 +48,17 @@ Repository Pattern - relies on hiding the implementation details behind a interf
 and this is allows us to build very modular and changeable software.
 We can have In-Memory Repository which stores customers in memory whenever we do Unit tests,
 but then also we can have a MySQL Repository, and whenever the managers come and say hey we're changing from MySQL to MongoDB for instance we can build a new Repository for MongoDB and fulfill the same Interface as MySQL Repository and then just swap it, and everything should work as expected.
+
+---
+
+- How do we need to fetch our Customers from memory repository/?
+- we need to add a way to retrieve data from the aggregate, like customer.person.ID
+
+The data is not accessible from outside of the aggregate,
+nothing outside of the aggregate can modify data,
+this is done by exposing functions that allows others to do it.
+If we want to modify name we expose a function which allows you to do that.
+You can not go directly and modify it.
+
+---
+
