@@ -1,7 +1,11 @@
 # Golang DDD (Domain Driven Design) Architecture Implementation
 
+This is a **Tavern** Business - Domain Driven Design Architecture Implementation in Golang.
+
+---
+
 Domain - Niche of Business Logic
-Core Topic Domain - Tavern, Sub Topic Doman - Customers.
+Core Topic Domain - Tavern, Sub-Topic Doman - Customers.
 
 **Layers:**
 
@@ -46,7 +50,7 @@ Actuall Business Logic.
 
 Factory Pattern - is design pattern that is used to encapsulate complex logic inside function for creating The Wanted instances without the caller knowing anything about the actual implementation details (with Interfaces).
 
-DDD suggests factories for creating complex Aggregates repositories or Service.
+DDD suggests factories for creating complex Aggregates, Repositories or Service.
 
 ---
 
@@ -106,8 +110,23 @@ Configuration Pattern - .
 
 Order Configuration - applies a customer repository to the service.
 
+---
+
+**Summary:**
+
+Entities and Value objects are instances,
+Entities are mutable (changeable) and Value objects are Not.
+
+Aggregates hold multiple Entities or Value objects,
+but they are related to one root Entity.
+
+Repository manages Aggregates.
+
+Services combines and ties together Repositories and other Services.
+
 ## TO DO
 
+- [ ] Refactor (names, dirs and etc.)
 - [ ] fix error handling (like messages in repo interface and also names of variables)
     - e.g. `product.ErrorFailedToAddProduct`-`"failed to add the product"` to `product.ErrorProductAlreadyExists`-`"product already exists"`
 - [ ] write unit tests for product memory repository, product aggregate, order service
@@ -132,5 +151,34 @@ Order Configuration - applies a customer repository to the service.
 
 ## Links and Sources
 
+**About DDD:**
+
+- Eric Evans is inventor of DDD Architecture
+- DDD Architecture in microservices
+
+---
+
+**Used Patterns:**
+
+- factory pattern
+- configuration pattern
+
+Questions:
+
+- difference between configuration pattern and dependency injection pattern?
+- is dependency injection pattern used in DDD?
+
+---
+
+**Golang DDD Implementation:**
+
+ProgrammingPercy:
+
 - https://programmingpercy.tech/blog/how-to-domain-driven-design-ddd-golang/
 - https://programmingpercy.tech/blog/how-to-structure-ddd-in-go/
+
+---
+
+**Golang Specific Topic:**
+
+**My Research's:**
