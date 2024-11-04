@@ -3,8 +3,12 @@ package services
 import (
 	"log"
 
+	"github.com/dotpep/golang-ddd-architecture/aggregate"
 	"github.com/dotpep/golang-ddd-architecture/domain/customer"
-	"github.com/dotpep/golang-ddd-architecture/domain/customer/memory"
+
+	memoryCustomer "github.com/dotpep/golang-ddd-architecture/domain/customer/memory"
+	"github.com/dotpep/golang-ddd-architecture/domain/product"
+	memoryProduct "github.com/dotpep/golang-ddd-architecture/domain/product/memory"
 	"github.com/google/uuid"
 )
 
@@ -22,6 +26,9 @@ type OrderConfiguration func(os *OrderService) error
 // we need to handle the customer aggregate so need CustomerRepository in OrderService
 type OrderService struct {
 	customers customer.CustomerRepository
+	products  product.ProductRepository
+
+	//TODO: billing billing.Service (subservice)
 }
 
 // NewOrderService is factory function
@@ -44,6 +51,7 @@ func NewOrderService(cfgs ...OrderConfiguration) (*OrderService, error) {
 
 //NewOrderService(
 //	WithMemoryCustomerRepository(), //or WithMongoCustomerRepository(),
+//	WithMemoryProductRepository(),
 //	WithLogging("debug"),
 //	WithTracing(),
 //)
@@ -58,20 +66,49 @@ func WithCustomerRepository(cr customer.CustomerRepository) OrderConfiguration {
 }
 
 func WithMemoryCustomerRepository() OrderConfiguration {
-	cr := memory.New()
+	cr := memoryCustomer.NewMemoryCustomerRepository()
 	return WithCustomerRepository(cr)
 }
 
+func WithMemoryProductRepository(products []aggregate.Product) OrderConfiguration {
+	return func(os *OrderService) error {
+		pr := memoryProduct.NewMemoryProductRepository()
+
+		for _, product := range products {
+			if err := pr.Add(product); err != nil {
+				return err
+			}
+		}
+
+		os.products = pr
+		return nil
+	}
+}
+
 // Business Logic of OrderService
-func (o *OrderService) CreateOrder(customerID uuid.UUID, products []uuid.UUID) error {
+func (o *OrderService) CreateOrder(customerID uuid.UUID, productsIDs []uuid.UUID) error {
 	// Fetch the customer
 	c, err := o.customers.Get(customerID)
 	if err != nil {
 		return err
 	}
 
-	// TODO: Get each Product, Ouchie no ProductRepository
-	log.Println(c)
+	// Get each Product
+	var products []aggregate.Product
+	var totalPrice float64
+
+	for _, id := range productsIDs {
+		p, err := o.products.GetByID(id)
+
+		if err != nil {
+			return err
+		}
+
+		products = append(products, p)
+		totalPrice += p.GetPrice()
+	}
+
+	log.Printf("Customer: %s has ordered %d products", c.GetID(), len(products))
 
 	return nil
 }

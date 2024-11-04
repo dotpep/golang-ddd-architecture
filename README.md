@@ -95,11 +95,40 @@ because you accept multiple repositories as input for instance, for this we will
 
 ---
 
+Service can hold multiple repositories, but a service is also allowed to hold other services.
+If our service is needs other service, we could simply hold a sub-service inside a service.
+
+---
+
 **Configuration Pattern:**
 
 Configuration Pattern - .
 
 Order Configuration - applies a customer repository to the service.
+
+## TO DO
+
+- [ ] fix error handling (like messages in repo interface and also names of variables)
+    - e.g. `product.ErrorFailedToAddProduct`-`"failed to add the product"` to `product.ErrorProductAlreadyExists`-`"product already exists"`
+- [ ] write unit tests for product memory repository, product aggregate, order service
+    - Customer Memory Repo:
+        - TestMemory_GetCustomer, aggregate.NewCustomer
+        - TestMemory_AddCustomer
+    - Product Memory Repo:
+        - TestMemoryProductRepository_Get
+        - TestMemoryProductRepository_Add
+        - Update
+        - Delete
+    - Customer Aggregate:
+        - TestCustomer_NewCustomer
+    - Product Aggregate:
+        - TestProduct_NewProduct
+    - Order Service:
+        - TestOrder_NewOrderService, with customer and products aggregate
+- [ ] correct naming of unit tests and other stuffs (Naming Convention)
+- [ ] unit testing: make package memory to memory_test and use memory.Something
+    - change `t.Fatal(err)` to `t.Error(err)`
+- [ ] setup it in your vscode and test it - [Setting up Delve and Air to debug Golang with VS Code](https://dev.to/nerdherd/setting-up-golang-on-vs-code-with-debugging-1kbe)
 
 ## Links and Sources
 

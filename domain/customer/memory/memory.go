@@ -15,7 +15,7 @@ type MemoryCustomerRepository struct {
 	sync.Mutex
 }
 
-func New() *MemoryCustomerRepository {
+func NewMemoryCustomerRepository() *MemoryCustomerRepository {
 	return &MemoryCustomerRepository{
 		customers: make(map[uuid.UUID]aggregate.Customer),
 	}

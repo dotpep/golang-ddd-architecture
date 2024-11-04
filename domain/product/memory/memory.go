@@ -14,7 +14,7 @@ type MemoryProductRepository struct {
 	sync.Mutex
 }
 
-func New() *MemoryProductRepository {
+func NewMemoryProductRepository() *MemoryProductRepository {
 	return &MemoryProductRepository{
 		products: make(map[uuid.UUID]aggregate.Product),
 	}
@@ -45,20 +45,10 @@ func (mr *MemoryProductRepository) Add(newProduct aggregate.Product) error {
 	mr.Lock()
 	defer mr.Unlock()
 
-	// check if the map is initialized
-	// if is not we do it
-	if mr.products == nil {
-		mr.Lock()
-		mr.products = make(map[uuid.UUID]aggregate.Product)
-		mr.Unlock()
-	}
-
-	// Make sure product is already in repository
 	if _, ok := mr.products[newProduct.GetID()]; ok {
 		return fmt.Errorf("product already exists :%w", product.ErrorFailedToAddProduct)
 	}
 
-	// if it doesn't we added
 	mr.products[newProduct.GetID()] = newProduct
 	return nil
 }
