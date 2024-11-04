@@ -1,8 +1,11 @@
 package services
 
 import (
+	"log"
+
 	"github.com/dotpep/golang-ddd-architecture/domain/customer"
 	"github.com/dotpep/golang-ddd-architecture/domain/customer/memory"
+	"github.com/google/uuid"
 )
 
 // Configuration Pattern
@@ -57,4 +60,18 @@ func WithCustomerRepository(cr customer.CustomerRepository) OrderConfiguration {
 func WithMemoryCustomerRepository() OrderConfiguration {
 	cr := memory.New()
 	return WithCustomerRepository(cr)
+}
+
+// Business Logic of OrderService
+func (o *OrderService) CreateOrder(customerID uuid.UUID, products []uuid.UUID) error {
+	// Fetch the customer
+	c, err := o.customers.Get(customerID)
+	if err != nil {
+		return err
+	}
+
+	// TODO: Get each Product, Ouchie no ProductRepository
+	log.Println(c)
+
+	return nil
 }
