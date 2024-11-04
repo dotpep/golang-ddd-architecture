@@ -10,18 +10,18 @@ import (
 	"github.com/google/uuid"
 )
 
-type MemoryRepository struct {
+type MemoryCustomerRepository struct {
 	customers map[uuid.UUID]aggregate.Customer
 	sync.Mutex
 }
 
-func New() *MemoryRepository {
-	return &MemoryRepository{
+func New() *MemoryCustomerRepository {
+	return &MemoryCustomerRepository{
 		customers: make(map[uuid.UUID]aggregate.Customer),
 	}
 }
 
-func (mr *MemoryRepository) Get(id uuid.UUID) (aggregate.Customer, error) {
+func (mr *MemoryCustomerRepository) Get(id uuid.UUID) (aggregate.Customer, error) {
 	// here we can not reach person.ID
 	//mr.customers.person.ID?xxx
 	//return aggregate.Customer{}, nil
@@ -31,7 +31,7 @@ func (mr *MemoryRepository) Get(id uuid.UUID) (aggregate.Customer, error) {
 	return aggregate.Customer{}, customer.ErrorCustomerNotFound
 }
 
-func (mr *MemoryRepository) Add(c aggregate.Customer) error {
+func (mr *MemoryCustomerRepository) Add(newCustomer aggregate.Customer) error {
 	// check if the map is initialized
 	// if is not we do it
 	if mr.customers == nil {
@@ -41,24 +41,26 @@ func (mr *MemoryRepository) Add(c aggregate.Customer) error {
 	}
 
 	// Make sure customer is already in repository
-	if _, ok := mr.customers[c.GetID()]; ok {
+	if _, ok := mr.customers[newCustomer.GetID()]; ok {
 		return fmt.Errorf("customer already exists :%w", customer.ErrorFailedToAddCustomer)
 	}
 
 	// if it doesn't we added
 	mr.Lock()
-	mr.customers[c.GetID()] = c
-	mr.Unlock()
+	mr.customers[newCustomer.GetID()] = newCustomer
+	defer mr.Unlock()
 	return nil
 }
 
-func (mr *MemoryRepository) Update(c aggregate.Customer) error {
-	if _, ok := mr.customers[c.GetID()]; ok {
-		return fmt.Errorf("customer does not exist: %w", customer.ErrorUpdateCustomer)
+func (mr *MemoryCustomerRepository) Update(newCustomer aggregate.Customer) error {
+	mr.Lock()
+	defer mr.Unlock()
+
+	if _, ok := mr.customers[newCustomer.GetID()]; ok {
+		return fmt.Errorf("customer does not exist: %w", customer.ErrorFailedToUpdateCustomer)
 	}
 
-	mr.Lock()
-	mr.customers[c.GetID()] = c
-	mr.Unlock()
+	mr.customers[newCustomer.GetID()] = newCustomer
+
 	return nil
 }

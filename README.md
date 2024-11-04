@@ -3,16 +3,18 @@
 Domain - Niche of Business Logic
 Core Topic Domain - Tavern, Sub Topic Doman - Customers.
 
+**Layers:**
+
 - Core Domain
 - Entities
 - Value Objects
 - Aggregates
-- Factory Pattern
+    - Factory Pattern
 - Repositories
 - Services
-- Configuration Pattern
+    - Configuration Pattern
 
----
+## Explanation
 
 **Entity:**
 
@@ -74,6 +76,14 @@ You can not go directly and modify it.
 
 ---
 
+In this case of Domain/Product/Memory/memory.go Repository,
+we will never return our error
+but it's up to the interface to determine if it's possible
+it's not up to the implementation it's up to the interface
+so repository decides if we need to return an error or not
+
+---
+
 **Services:**
 
 Services - will tie together all loosely coupled repositories into business logic that fulfills the needs of domain.
@@ -90,3 +100,8 @@ because you accept multiple repositories as input for instance, for this we will
 Configuration Pattern - .
 
 Order Configuration - applies a customer repository to the service.
+
+## Links and Sources
+
+- https://programmingpercy.tech/blog/how-to-domain-driven-design-ddd-golang/
+- https://programmingpercy.tech/blog/how-to-structure-ddd-in-go/
