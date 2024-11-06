@@ -86,7 +86,7 @@ func WithMemoryProductRepository(products []aggregate.Product) OrderConfiguratio
 }
 
 // Business Logic of OrderService
-func (o *OrderService) CreateOrder(customerID uuid.UUID, productsIDs []uuid.UUID) error {
+func (o *OrderService) CreateOrder(customerID uuid.UUID, productsIDs []uuid.UUID) (float64, error) {
 	// Fetch the customer
 	c, err := o.customers.Get(customerID)
 	if err != nil {
@@ -101,7 +101,7 @@ func (o *OrderService) CreateOrder(customerID uuid.UUID, productsIDs []uuid.UUID
 		p, err := o.products.GetByID(id)
 
 		if err != nil {
-			return err
+			return 0, err
 		}
 
 		products = append(products, p)
@@ -110,5 +110,5 @@ func (o *OrderService) CreateOrder(customerID uuid.UUID, productsIDs []uuid.UUID
 
 	log.Printf("Customer: %s has ordered %d products", c.GetID(), len(products))
 
-	return nil
+	return totalPrice, nil
 }
