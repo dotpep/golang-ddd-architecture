@@ -126,6 +126,18 @@ Services combines and ties together Repositories and other Services.
 
 ## TO DO
 
+**Features:**
+
+- [ ] Complete Writing Explanation of DDD in README
+- [ ] Give additional Links in below of README
+- [ ] Refactor structure and namings
+- [ ] Implement `Billing Service` with repositories and aggregates (same as order service using same concepts of DDD)
+- [ ] Write good docstring/docs for functions
+- [ ] write Unit Tests and save it to tests/ file
+- [ ] add REST API, that will use this DDD app/domain app/aggregate app/... in case of api/v1/... with models, migrations of RDBMS (like in my [repo: github dotpep clean-ddd-marketplace-api](https://github.com/dotpep/clean-ddd-marketplace-api))
+
+**Unit Test:**
+
 - [ ] Refactor (names, dirs and etc.)
 - [ ] fix error handling (like messages in repo interface and also names of variables)
     - e.g. `product.ErrorFailedToAddProduct`-`"failed to add the product"` to `product.ErrorProductAlreadyExists`-`"product already exists"`
@@ -147,7 +159,7 @@ Services combines and ties together Repositories and other Services.
 - [ ] correct naming of unit tests and other stuffs (Naming Convention)
 - [ ] unit testing: make package memory to memory_test and use memory.Something
     - change `t.Fatal(err)` to `t.Error(err)`
-- [ ] setup it in your vscode and test it - [Setting up Delve and Air to debug Golang with VS Code](https://dev.to/nerdherd/setting-up-golang-on-vs-code-with-debugging-1kbe)
+- [x] setup it in your vscode and test it - [Setting up Delve and Air to debug Golang with VS Code](https://dev.to/nerdherd/setting-up-golang-on-vs-code-with-debugging-1kbe)
 
 ## Links and Sources
 

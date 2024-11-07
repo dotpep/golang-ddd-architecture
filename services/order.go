@@ -1,12 +1,14 @@
 package services
 
 import (
+	"context"
 	"log"
 
 	"github.com/dotpep/golang-ddd-architecture/aggregate"
 	"github.com/dotpep/golang-ddd-architecture/domain/customer"
 
 	memoryCustomer "github.com/dotpep/golang-ddd-architecture/domain/customer/memory"
+	mongoCustomer "github.com/dotpep/golang-ddd-architecture/domain/customer/mongo"
 	"github.com/dotpep/golang-ddd-architecture/domain/product"
 	memoryProduct "github.com/dotpep/golang-ddd-architecture/domain/product/memory"
 	"github.com/google/uuid"
@@ -68,6 +70,23 @@ func WithCustomerRepository(cr customer.CustomerRepository) OrderConfiguration {
 func WithMemoryCustomerRepository() OrderConfiguration {
 	cr := memoryCustomer.NewMemoryCustomerRepository()
 	return WithCustomerRepository(cr)
+}
+
+func WithMongoCustomerRepository(ctx context.Context, connectionString string) OrderConfiguration {
+	//cr, err := mongoCustomer.New(ctx, connectionString)
+	//if err != nil {
+	//	return err
+	//}
+	//return WithCustomerRepository(cr)
+
+	return func(os *OrderService) error {
+		cr, err := mongoCustomer.New(ctx, connectionString)
+		if err != nil {
+			return err
+		}
+		os.customers = cr
+		return nil
+	}
 }
 
 func WithMemoryProductRepository(products []aggregate.Product) OrderConfiguration {

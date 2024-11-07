@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"testing"
 
 	"github.com/dotpep/golang-ddd-architecture/aggregate"
@@ -32,7 +33,11 @@ func TestOrder_NewOrderService(t *testing.T) {
 	products := init_products(t)
 
 	os, err := NewOrderService(
-		WithMemoryCustomerRepository(),
+		//WithMemoryCustomerRepository(),
+		WithMongoCustomerRepository(
+			context.Background(),
+			"mongodb://localhost:27017/",
+		),
 		WithMemoryProductRepository(products),
 	)
 
@@ -41,7 +46,7 @@ func TestOrder_NewOrderService(t *testing.T) {
 	}
 
 	// Add customer
-	cust, err := aggregate.NewCustomer("ashly")
+	cust, err := aggregate.NewCustomer("ashley")
 	if err != nil {
 		t.Error(err)
 	}
